@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const addButton = document.getElementById("add-button");
     const dropdown = document.getElementById("dropdown");
     const notesContainer = document.getElementById("notes-container");
+    let draggedElement = null;
 
     addButton.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addTitle() {
         const title = createTitle();
         notesContainer.appendChild(title);
+        makeDraggable(title);
         saveNotes();
         dropdown.classList.remove("show");
     }
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const titleInput = document.createElement("input");
         titleInput.setAttribute("type", "text");
-        titleInput.setAttribute("class", "form-control");
+        titleInput.setAttribute("class", "title-input");
         titleInput.setAttribute("placeholder", "Digite seu título");
 
         const saveButton = document.createElement("button");
@@ -67,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addContent() {
         const content = createContent();
         notesContainer.appendChild(content);
+        makeDraggable(content);
         saveNotes();
         dropdown.classList.remove("show");
     }
@@ -77,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         content.classList.add("note-content", "draggable");
 
         const contentTextarea = document.createElement("textarea");
-        contentTextarea.setAttribute("class", "form-control");
+        contentTextarea.setAttribute("class", "content-input");
         contentTextarea.setAttribute("placeholder", "Digite seu conteúdo");
 
         const saveButton = document.createElement("button");
@@ -106,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function addList() {
         const list = createList();
         notesContainer.appendChild(list);
-        saveNotes();
+        makeDraggable(list);
         dropdown.classList.remove("show");
     }
 
@@ -117,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const listTitleInput = document.createElement("input");
         listTitleInput.setAttribute("type", "text");
-        listTitleInput.setAttribute("class", "form-control");
+        listTitleInput.setAttribute("class", "list-content");
         listTitleInput.setAttribute("placeholder", "Título da Lista");
 
         const listItemsContainer = document.createElement("ul");
@@ -132,6 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
             saveNotes();
         });
 
+        const saveButton = document.createElement("button");
+        saveButton.innerHTML = '<i class="bi bi-save"></i>';
+        saveButton.classList.add("btn", "btn-success", "btn-sm", "ms-2");
+        saveButton.addEventListener("click", function () {
+            saveNotes();
+        });
+
         const removeButton = document.createElement("button");
         removeButton.innerHTML = '<i class="bi bi-trash"></i>';
         removeButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
@@ -143,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
         list.appendChild(listTitleInput);
         list.appendChild(listItemsContainer);
         list.appendChild(addItemButton);
+        list.appendChild(saveButton);
         list.appendChild(removeButton);
 
         return list;
@@ -155,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const itemInput = document.createElement("input");
         itemInput.setAttribute("type", "text");
-        itemInput.setAttribute("class", "form-control");
+        itemInput.setAttribute("class", "item");
         itemInput.setAttribute("placeholder", "Digite um item");
 
         const removeButton = document.createElement("button");
@@ -170,6 +181,50 @@ document.addEventListener("DOMContentLoaded", function () {
         listItem.appendChild(removeButton);
 
         return listItem;
+    }
+
+    // Função para tornar um elemento arrastável
+    function makeDraggable(element) {
+        element.setAttribute("draggable", "true");
+
+        element.addEventListener("dragstart", function (event) {
+            draggedElement = event.target;
+            setTimeout(function () {
+                event.target.style.display = "none";
+            }, 0);
+        });
+
+        element.addEventListener("dragend", function (event) {
+            setTimeout(function () {
+                draggedElement.style.display = "block";
+                draggedElement = null;
+            }, 0);
+        });
+
+        notesContainer.addEventListener("dragover", function (event) {
+            event.preventDefault();
+            const afterElement = getDragAfterElement(notesContainer, event.clientY);
+            const draggable = document.querySelector(".draggable.dragging");
+            if (afterElement == null) {
+                notesContainer.appendChild(draggable);
+            } else {
+                notesContainer.insertBefore(draggable, afterElement);
+            }
+        });
+    }
+
+    // Função auxiliar para obter o elemento após o qual arrastar
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll(".draggable:not(.dragging)")];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 
     // Função para salvar as notas
@@ -214,23 +269,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 const title = createTitle();
                 title.querySelector("input").value = noteData.content;
                 notesContainer.appendChild(title);
+                makeDraggable(title);
             } else if (noteData.type === "content") {
                 const content = createContent();
                 content.querySelector("textarea").value = noteData.content;
                 notesContainer.appendChild(content);
+                makeDraggable(content);
             } else if (noteData.type === "list") {
                 const list = createList();
                 list.querySelector("input[type=text]").value = noteData.title;
-                noteData.content.forEach((itemContent) => {
+                const itemsContainer = list.querySelector(".list-items");
+                noteData.content.forEach((item) => {
                     const listItem = createListItem();
-                    listItem.querySelector("input[type=text]").value = itemContent;
-                    list.querySelector(".list-items").appendChild(listItem);
+                    listItem.querySelector("input").value = item;
+                    itemsContainer.appendChild(listItem);
                 });
                 notesContainer.appendChild(list);
+                makeDraggable(list);
             }
         });
     }
 
-    // Carregar as notas ao iniciar a página
+    // Carregar as notas ao iniciar a aplicação
     loadNotes();
+
+    // Evento para fechar o dropdown ao clicar fora dele
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches("#add-button")) {
+            dropdown.classList.remove("show");
+        }
+    });
+
+    // Evento para fechar o dropdown ao pressionar ESC
+    window.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            dropdown.classList.remove("show");
+        }
+    });
 });
