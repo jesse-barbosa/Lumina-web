@@ -1,0 +1,26 @@
+{
+"name": "Notten",
+"version": "1.0.0",
+"description": "Your task assistant",
+"main": "main.js",
+"scripts": {
+  "start": "electron .",
+  "package": "electron-packager . Notten --platform=win32 --arch=x64 --out=release-builds --overwrite"
+},
+"repository": {
+  "type": "git",
+  "url": "git+https://github.com/jesse-barbosa/nottenApp.git"
+},
+"keywords": [
+  "notten"
+],
+"author": "Jessé Barbosa",
+"license": "ISC",
+"bugs": {
+  "url": "https://github.com/jesse-barbosa/nottenApp/issues"
+},
+"homepage": "https://jesse-barbosa.github.io/notten/",
+"devDependencies": {
+  "electron": "^31.0.1"
+}
+}
