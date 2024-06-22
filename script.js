@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function createText() {
         const text = document.createElement("div");
-        text.classList.add("note-content", "draggable");
+        text.classList.add("note-content", "position-absolute", "draggable");
         text.draggable = true;
         const textInput = document.createElement("textarea");
         textInput.setAttribute("class", "content-input");
@@ -34,14 +34,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const saveButton = document.createElement("button");
         saveButton.innerHTML = '<i class="bi bi-save"></i>';
-        saveButton.classList.add("btn", "btn-success", "btn-sm", "ms-2");
+        saveButton.classList.add("btn", "btn-success", "btn-sm", "ms-5", "position-absolute")
         saveButton.addEventListener("click", function () {
             saveNotes();
         });
 
         const removeButton = document.createElement("button");
         removeButton.innerHTML = '<i class="bi bi-trash"></i>';
-        removeButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+        removeButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2", "position-absolute")
         removeButton.addEventListener("click", function () {
             text.remove();
             saveNotes();
@@ -50,18 +50,39 @@ document.addEventListener("DOMContentLoaded", function () {
         saveButton.classList.add("invisible")
         removeButton.classList.add("invisible")
 
-        text.addEventListener("click", function () {
+        textInput.addEventListener("click", function () {
             saveButton.classList.remove("invisible");
             removeButton.classList.remove("invisible");
         
         textInput.classList.add("border", "border-1");
         })
-        notesContainer.addEventListener("click", function () {
+
+        window.addEventListener("click", function (event) {
+            if (!event.target.matches("textarea")) {
+                saveButton.classList.add("invisible")
+                removeButton.classList.add("invisible")
+
+                textInput.classList.remove("border", "border-1")
+            }
+        });
+    
+        window.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                saveButton.classList.add("invisible")
+                removeButton.classList.add("invisible")
+
+                textInput.classList.remove("border", "border-1")
+            }
+        });
+
+        saveButton.addEventListener("click", function () {
             saveButton.classList.add("invisible")
             removeButton.classList.add("invisible")
-            
-            textInput.classList.remove("border", "border-1");
-        });
+
+            textInput.classList.remove("border", "border-1")
+
+        })
+    
         
         text.appendChild(textInput);
         text.appendChild(saveButton);
@@ -85,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const listTitleInput = document.createElement("input");
         listTitleInput.setAttribute("type", "text");
-        listTitleInput.setAttribute("class", "list-content");
+        listTitleInput.setAttribute("class", "list-title");
         listTitleInput.setAttribute("placeholder", "Título da Lista");
 
         const listItemsContainer = document.createElement("div");
