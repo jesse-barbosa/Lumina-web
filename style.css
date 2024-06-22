@@ -18,13 +18,14 @@ main {
 }
 
 main .header {
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8vw 0 13px;
+  padding: 0 6vw 0 13px;
   max-width: 40vw;
   height: 100vh;
-  background-color: #202020;
+  background-color: #1f1e1e;
 }
 
 main .header .Logo-inicial {
@@ -85,7 +86,7 @@ main .header .section .navigation .list li:hover {
 main .main-principal {
   display: flex;
   flex-direction: column;
-  margin-left: 3.8rem;
+  margin-left: 20rem;
 }
 
 .titulo-central {
@@ -108,6 +109,8 @@ header section .modalConfiguracoes .modal-body {
 }
 
 main section .card {
+  color: white;
+  background-color: #202020;
   transition: all 0.2s;
 }
 
@@ -161,15 +164,14 @@ main section .card:hover {
 /* Itens adicionais */
 #notes-container {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  width: 120%;
   gap: 1rem;
 }
 
 .note-content {
   color: rgba(245, 245, 245, 0.8);
   padding: 5px;
-  border: none;
-  background-color: rgb(40, 40, 40);
   outline: none;
   border-radius: 10px;
 }
@@ -179,7 +181,7 @@ main section .card:hover {
   color: rgba(245, 245, 245, 0.8);
   min-height: 5rem;
   padding: 15px;
-  background-color: transparent;
+  background-color: rgb(40, 40, 40);
   resize: both;
   border: none;
   outline: none;
