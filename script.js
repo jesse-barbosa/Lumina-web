@@ -47,6 +47,22 @@ document.addEventListener("DOMContentLoaded", function () {
             saveNotes();
         });
 
+        saveButton.classList.add("invisible")
+        removeButton.classList.add("invisible")
+
+        text.addEventListener("click", function () {
+            saveButton.classList.remove("invisible");
+            removeButton.classList.remove("invisible");
+        
+        textInput.classList.add("border", "border-1");
+        })
+        notesContainer.addEventListener("click", function () {
+            saveButton.classList.add("invisible")
+            removeButton.classList.add("invisible")
+            
+            textInput.classList.remove("border", "border-1");
+        });
+        
         text.appendChild(textInput);
         text.appendChild(saveButton);
         text.appendChild(removeButton);
