@@ -13,9 +13,9 @@
     <section class="section">
         <h1 class="Logo-inicial fw-bold fs-4">Notten</h1>
         <nav class="navigation">
-            <h1 class="titulos fs-5 fw-bold mt-3">Início</h1>
+            <h1 class="titulos fs-6 fw-semibold mt-1">Início</h1>
             <ul class="list">
-                <li class="li-active"><a href="index.html"><i class="bi bi-house-door me-2"></i>Página inicial</a></li>
+                <a href="index.html" class="link link-underline link-underline-opacity-0"><li class="li-active"><i class="bi bi-house-door me-2"></i>Página inicial</li></a>
                 <!-- Abrir o modal de pesquisa -->
                 <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#searchModal"> 
                 <li><i class="bi bi-search me-2"></i>Pesquisar</li>
@@ -29,18 +29,18 @@
                 <li><a href="#"><i class="bi bi-gear me-2"></i>Configurações</a></li>
                 </button>
             </ul>
-        <h1 class="titulos fs-5 fw-bold mt-3">Particular</h1>
+        <h1 class="titulos fs-6 fw-semibold mt-1">Particular</h1>
         <ul class="list"> 
-            <li><a href="pages/workspaces.html">Workspace 1</a></li>
+            <a href="pages/workspaces.html" class="link link-underline link-underline-opacity-0"><li>Workspace 1</li></a>
             <!-- Botão para abrir o modal de adicionar página -->
             <button class="bg-transparent border-0 text-light" data-bs-toggle="modal" data-bs-target="#addPageModal">
                 <li><i class="bi bi-plus-circle me-2"></i>Adicionar Página</li>
             </button>
         </ul>
         
-            <h1 class="titulos fs-5 fw-bold mt-3">Mais</h1>
+            <h1 class="titulos fs-6 fw-semibold mt-1">Mais</h1>
             <ul class="list">
-                <li><a href="https://jesse-barbosa.github.io/notten/"><i class="bi bi-question-circle me-2"></i>Suporte</a></li>
+                <a href="https://jesse-barbosa.github.io/notten/" class="link link-underline link-underline-opacity-0" target=”_blank”><li><i class="bi bi-question-circle me-2"></i>Suporte</li></a>
             </ul>
         </nav>
     </section>
@@ -212,7 +212,7 @@
 </div>
 
 <section class="main-principal">
-    <h1 class="titulo-central text-center fw-bold my-5">Olá [Nome do usuário]</h1>
+    <h1 class="titulo-central text-center fw-bold my-5" id="titulo-central"></h1>
     <span class="topic"><i class="bi bi-clock-history me-2"></i>Acesso recente</span>
     <section>
         <div class="container mt-4">
@@ -262,6 +262,28 @@
     </section>
 </section>
 </main>
+<script>
+    getDate()
+    function getDate(){
+        var agora = new Date()
+        var hora = agora.getHours()
+        var diaMes = agora.getDate();
+        var diaSem = agora.getDay();
+        // Array com os nomes dos dias da semana
+        var diasDaSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+        var saudacao = document.getElementById('titulo-central')
+        
+        if (hora < 12) {
+            saudacao.innerHTML = `Bom dia, hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`
+        }
+        else if (hora < 18){
+            saudacao.innerHTML = `Boa tarde, hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`
+        }
+        else {
+            saudacao.innerHTML = `Boa noite, hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`
+        }
+    }
+</script>
 <script src="script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
