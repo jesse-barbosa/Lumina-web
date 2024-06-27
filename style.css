@@ -19,9 +19,10 @@ main {
 /*Estilos para o cabeçalho*/
 .header {
   position: fixed;
+  z-index: 1000 !important;
   display: flex;
   justify-content: center;
-  padding: 8vh 8vh 0 2vh;
+  padding: 8vh 4vh 0 2vh;
   max-width: 40vw;
   height: 100vh;
   background-color: #202020;
@@ -33,26 +34,27 @@ main {
 }
 
 .header .section .navigation {
-  gap: 0.5rem;
+  gap: 0.8rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
 .header .section .navigation .titulos {
-  color: white;
+  color: rgba(255, 255, 255, 0.226);
   padding: 0 0 0 1rem;
 }
 
 .header .section .navigation .list {
+  width: 13rem;
   display: flex;
   flex-direction: column;
-  padding: 13px 0 0 1rem;
-  gap: 13px;
+  padding: 0 0 0 1rem;
+  gap: 12px;
 }
 
 .header .section .navigation .list li {
-  margin: -6px 0 -6px 0;
+  margin: -6px 0;
 }
 
 .header .section .navigation .list li a,
@@ -164,10 +166,11 @@ main .main-principal {
 }
 
 .content-input {
+  overflow: auto;
   font-size: 16px;
   color: rgba(245, 245, 245, 0.8);
   min-height: 2rem;
-  padding: 2%;
+  padding: 1%;
   background-color: transparent;
   resize: both;
   border: none;
@@ -177,7 +180,8 @@ main .main-principal {
   flex-grow: 1;
 }
 
- section .list {
+ .main-principal .list {
+  min-width: 10rem;
   background-color: #202020;
   color: #fff;
   padding: 15px;
