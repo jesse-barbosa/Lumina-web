@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const addButton = document.getElementById("add-button");
     const dropdown = document.getElementById("dropdown");
@@ -32,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         text.setAttribute('draggable', 'true');
         const textInput = document.createElement("textarea");
         textInput.setAttribute("class", "content-input");
-        textInput.setAttribute("placeholder", "Digite seu texto");
 
         const removeButton = document.createElement("button");
         removeButton.innerHTML = '<i class="bi bi-trash"></i>';
@@ -46,13 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         textInput.addEventListener("click", function () {
             removeButton.classList.remove("invisible");
-            textInput.classList.add("border", "border-1");
+            text.classList.add("border", "border-1");
         });
 
         window.addEventListener("click", function (event) {
             if (!event.target.matches("textarea")) {
                 removeButton.classList.add("invisible");
-                textInput.classList.remove("border", "border-1");
+                text.classList.remove("border", "border-1");
                 saveNotes();
             }
         });
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.addEventListener("keydown", function (event) {
             if (event.key === "Escape") {
                 removeButton.classList.add("invisible");
-                textInput.classList.remove("border", "border-1");
+                text.classList.remove("border", "border-1");
             }
         });
 
