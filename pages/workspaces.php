@@ -1,0 +1,54 @@
+<?php
+require_once('../class/conexao.php');
+require_once('../class/manipularDados.php');
+
+session_start();
+
+$manipularDados = new ManipularDados();
+
+if (isset($_SESSION['email']) && isset($_SESSION['password'])) {
+    if ($manipularDados->loginUser($_SESSION['email'], $_SESSION['password'])) {
+        $username = $_SESSION['username'];
+        $email = $_SESSION['email'];
+    } else {
+        header("Location: login.php");
+        exit;
+    }
+} else {
+    header("Location: login.php");
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Notten</title>
+    <style>
+        main {
+        display: flex;
+        }
+    </style>
+</head>
+<body>
+    <?php include_once("../includes/menu.php"); ?>
+    <main>
+        <?php include_once("../includes/modals.php"); ?>
+        <section class="main-principal mt-5 w-100 vh-100" id="main-principal">
+            <div class="container-fluid">
+                <div class="row justify-content-end">
+                    <div class="col-1">
+                        <?php include_once("../includes/tools.php"); ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="../js/scripts.js"></script>
+</body>
+</html>
