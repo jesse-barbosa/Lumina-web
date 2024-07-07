@@ -4,7 +4,7 @@
         <nav class="navigation">
             <h1 class="titulos fs-6 fw-semibold mt-1">Início</h1>
             <ul class="list">
-                <a href="/Notten/index.php" class="link link-underline link-underline-opacity-0"><li><i class="bi bi-house-door me-2"></i>Página inicial</li></a>
+                <a href="./index.php" class="link link-underline link-underline-opacity-0"><li><i class="bi bi-house-door me-2"></i>Página inicial</li></a>
                 <!-- Abrir o modal de pesquisa -->
                 <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#searchModal"> 
                 <li><i class="bi bi-search me-2"></i>Pesquisar</li>
@@ -20,7 +20,7 @@
             </ul>
         <h1 class="titulos fs-6 fw-semibold mt-1">Particular</h1>
         <ul class="list"> 
-            <a href="/Notten/pages/workspaces.php" class="link link-underline link-underline-opacity-0"><li>Workspace 1</li></a>
+            <a href="./workspaces.php" class="link link-underline link-underline-opacity-0"><li>Workspace 1</li></a>
             <!-- Botão para abrir o modal de adicionar página -->
             <button class="bg-transparent border-0 text-light" data-bs-toggle="modal" data-bs-target="#addPageModal">
                 <li><i class="bi bi-plus-circle me-2"></i>Adicionar Página</li>
