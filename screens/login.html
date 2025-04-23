@@ -47,14 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <img src="img/imgForm.png" alt="">
         <div class="pagina-geral">
             <h1>Faça Login ao Lumina</h1>
-            <form action="login.php" method="post" class="text-center">
+            <form action="login.html" method="post" class="text-center">
                 <input type="email" name="email" placeholder="Seu E-mail" class="input-geral mb-2 text-center" required>
                 <input type="password" name="password" placeholder="Sua Senha" class="input-geral mb-2 text-center" required>
                 <button type="submit" id="loginButton" class="submit-geral">Entrar</button>
                 <?php if(isset($error_message)) { ?>
                     <p class="error"><?php echo $error_message; }
                 ?></p>
-                <a href="cadastro.php" class="link link-underline link-underline-opacity-0">Não tenho uma conta</a>
+                <a href="cadastro.html" class="link link-underline link-underline-opacity-0">Não tenho uma conta</a>
             </form>
         </div>
     </section>
