@@ -11,7 +11,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile(path.join(__dirname, 'index.html')); // Carrega o arquivo HTML
+    win.loadFile(path.join(__dirname, 'screens/index.html')); // Carrega o arquivo HTML
 }
 
 app.whenReady().then(createWindow);
