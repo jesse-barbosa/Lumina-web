@@ -1,5 +1,5 @@
 {
-  "name": "notten",
+  "name": "lumina",
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
@@ -7,7 +7,7 @@
     "electron-builder": "^26.0.12"
   },
   "build": {
-    "appId": "com.notten.app",
+    "appId": "com.lumina.app",
     "linux": {
       "target": [
         "AppImage"
