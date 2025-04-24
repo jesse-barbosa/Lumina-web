@@ -90,14 +90,21 @@
           </div>
         </div>
       </section>
-      <button class="absolute w-16 h-16 right-5 bottom-5 rounded-full p-2 text-neutral-200 bg-blue-500 hover:bg-blue-600 transition">
+      <button id="openTaskModalBtn" class="absolute w-16 h-16 right-5 bottom-5 rounded-full p-2 text-neutral-200 bg-blue-500 hover:bg-blue-600 transition">
         <i class="bi bi-plus text-4xl"></i>
-      </button>
+      </button>      
     </div>
   </main>
 
   <!-- Scripts -->
   <script src="../components/menu-component.js" defer></script>
+  <script src="../components/modals/task-component.js" defer></script>
+  <script>
+    // Abrir modal ao clicar no botão
+    document.getElementById('openTaskModalBtn').addEventListener('click', () => {
+      document.getElementById('addTaskModal').classList.remove('hidden');
+    });
+  </script>
   <script>
     const username = "USER_NAME";
     document.getElementById('user-name').innerText = username;
@@ -123,6 +130,7 @@
       dropdown.classList.toggle('hidden');
     });
   </script>
+  <!-- Modals -->
+   <task-modal></task-modal>
 </body>
-
 </html>
