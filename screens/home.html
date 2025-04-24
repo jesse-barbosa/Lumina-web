@@ -1,96 +1,158 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Lumina</title>
-</head>
-<body>
-<!-- Menu -->
-<main>
-<!-- Incluir Modals -->
 
-<section class="main-principal">
-<div class="dropdown profile-icon text-end mt-3 me-3">
-                <button class="border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img class="rounded-5 profile-picture" src="img/profileIcon/defaultIcon.png" alt="">
-                </button>
-                <ul class="dropdown-menu p-2">
-                    <!-- ! FIX: Exibir o nome de usuário -->
-                    <li><span class="dropdown-item">Usuário: USER_NAME</span></li> 
-                    <li><a href="login.html" class="dropdown-item text-center"><button class="btn btn-danger px-5">Sair</button></a></li>
-                </ul>
-            </div>
-    <h1 class="saudacao text-start fw-bold my-5" id="saudacao"></h1>
-    <span class="topic"><i class="bi bi-clock-history me-2"></i>Acesso recente</span>
-    <section>
-        <div class="container mt-4">
-            <div class="row me-5">
-                <div class="col-md-4 col-lg-3">
-                    <div class="card mb-3 px-5" style="max-width: 18rem;">
-                        <div class="card-header"></div>
-                        <div class="card-body p-5"></div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-3">
-                    <div class="card mb-3 px-5" style="max-width: 18rem;">
-                        <div class="card-header"></div>
-                        <div class="card-body p-5"></div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-lg-3">
-                    <div class="card mb-3 px-5" style="max-width: 18rem;">
-                        <div class="card-header"></div>
-                        <div class="card-body p-5"></div>
-                    </div>
-                </div>
-            </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <title>Lumina</title>
+</head>
+
+<body class="bg-neutral-50 text-neutral-800 font-sans">
+  <!-- Sidebar Menu -->
+  <header class="w-48 fixed top-0 left-0 h-screen bg-white border-r px-3 py-5 z-20">
+    <div class="flex items-center gap-2 px-3 mb-8">
+      <img src="../img/icon.png" alt="Lumina" class="w-8 h-8 mr-2">
+      <h1 class="text-xl font-bold text-neutral-700">Lumina</h1>
+    </div>
+    
+    <nav class="space-y-6">
+      <div>
+        <h2 class="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Início</h2>
+        <ul class="space-y-2">
+          <li><a href="./home.html"><i class="bi bi-list-check px-1 mr-2"></i>Minhas Tarefas</a></li>
+          <li><a href="./home.html"><i class="bi bi-journals px-1 mr-2"></i>Minhas Anotações</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Anotações</h2>
+        <ul class="space-y-2">
+          <li><a href="./workspaces.html"><i class="bi bi-grid px-1 mr-2"></i>Anotação sem T...</a></li>
+          <li><button class="w-full text-left" data-bs-toggle="modal" data-bs-target="#addPageModal"><i class="bi bi-plus-circle px-1 mr-2"></i>Adicionar Página</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Mais</h2>
+        <ul class="space-y-2">
+          <li><a href="https://lumina-app.odoo.com/" target="_blank"><i class="bi bi-question-circle px-1 mr-2"></i>Suporte</a></li>
+          <li><button class="w-full text-left" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear px-1 mr-2"></i>Configurações</button></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="ml-48 min-h-screen">
+    <!-- Top Bar with Profile Dropdown -->
+    <div class="sticky top-0 z-10 flex justify-between items-center p-4 bg-white border-b border-neutral-200">
+      <div class="flex items-center">
+        <h1 class="text-lg font-semibold text-neutral-800">Dashboard</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative inline-block text-left">
+          <button id="dropdownButton" class="flex items-center gap-2 focus:outline-none">
+            <img src="../img/profileIcon/defaultIcon.png" alt="Profile" class="w-8 h-8 rounded-full border border-neutral-200">
+            <span class="text-sm font-medium" id="user-name-display">USER_NAME</span>
+            <i class="bi bi-chevron-down text-neutral-500 text-sm"></i>
+          </button>
+          <ul id="dropdownMenu" class="hidden absolute right-0 mt-2 w-56 bg-white border border-neutral-200 rounded-md shadow-lg z-10">
+            <li><span class="block px-4 py-2 text-sm text-neutral-700">Usuário: <span id="user-name">USER_NAME</span></span></li>
+            <li><a href="login.html" class="block px-4 py-2 text-sm text-center text-white bg-red-500 hover:bg-red-600 rounded-b-md">Sair</a></li>
+          </ul>
         </div>
-    </section>
-    <span class="topic mt-2"><i class="bi bi-calendar-check me-2"></i>Agenda</span>
-    <section>
-        <div class="container mt-4">
-            <div class="row me-5">
-                <div class="col-lg-9 col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title py-5"></h5>
-                            <p class="card-text"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <!-- Saudação -->
+      <section class="mb-6">
+        <div class="flex items-baseline">
+          <h1 id="saudacao" class="text-2xl font-semibold text-neutral-800"></h1>
         </div>
-    </section>
-</section>
-</main>
-<script>
+      </section>
+
+      <!-- Tasks Section -->
+      <section class="mb-8">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-lg font-medium">Tarefas</h2>
+            <span class="text-sm text-neutral-500">2/4 concluídas</span>
+          </div>
+          <div class="card-body">
+            <div class="space-y-3">
+              <div class="flex items-start justify-between p-3 border rounded-md">
+                <div class="flex items-start gap-3">
+                  <input type="checkbox" class="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500">
+                  <div>
+                    <p class="font-medium">Revisar relatórios trimestrais</p>
+                    <p class="text-sm text-neutral-500">Analisar métricas de desempenho do Q3</p>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button class="p-1.5 text-neutral-500 hover:text-neutral-700 rounded-md hover:bg-neutral-100">
+                    <i class="bi bi-pencil text-sm"></i>
+                  </button>
+                  <button class="p-1.5 text-neutral-500 hover:text-red-500 rounded-md hover:bg-neutral-100">
+                    <i class="bi bi-trash text-sm"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="flex items-start justify-between p-3 border rounded-md">
+                <div class="flex items-start gap-3">
+                  <input type="checkbox" checked class="mt-1 h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500">
+                  <div class="text-neutral-500 line-through">
+                    <p class="font-medium">Preparar apresentação para cliente</p>
+                    <p class="text-sm">Finalizar slides para reunião de amanhã</p>
+                  </div>
+                </div>
+                <div class="flex gap-1">
+                  <button class="p-1.5 text-neutral-500 hover:text-neutral-700 rounded-md hover:bg-neutral-100">
+                    <i class="bi bi-pencil text-sm"></i>
+                  </button>
+                  <button class="p-1.5 text-neutral-500 hover:text-red-500 rounded-md hover:bg-neutral-100">
+                    <i class="bi bi-trash text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <button class="absolute w-16 h-16 right-5 bottom-5 rounded-full p-2 text-neutral-200 bg-blue-500 hover:bg-blue-600 transition">
+        <i class="bi bi-plus text-4xl"></i>
+      </button>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script>
     const username = "USER_NAME";
+    document.getElementById('user-name').innerText = username;
+    document.getElementById('user-name-display').innerText = username;
 
     getDate();
 
     function getDate() {
-        var agora = new Date();
-        var hora = agora.getHours();
-        var diaMes = agora.getDate();
-        var diaSem = agora.getDay();
+      const agora = new Date();
+      const hora = agora.getHours();
+      const diaMes = agora.getDate();
+      const diaSem = agora.getDay();
 
-        var diasDaSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-        var saudacao = document.getElementById('saudacao');
+      const diasDaSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+      const saudacao = document.getElementById('saudacao');
 
-        if (hora < 12) {
-            saudacao.innerHTML = `<bold>Bom dia, ${username}</bold> <br /> Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`;
-        } else if (hora < 18) {
-            saudacao.innerHTML = `<bold>Boa tarde, ${username}</bold> <br /> Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`;
-        } else {
-            saudacao.innerHTML = `<bold>Boa noite, ${username}</bold> <br /> Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.`;
-        }
+      let mensagem = hora < 12 ? `Bom dia, ${username}` : hora < 18 ? `Boa tarde, ${username}` : `Boa noite, ${username}`;
+      saudacao.innerHTML = `${mensagem}<br><span class="text-sm font-normal text-neutral-500">Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.</span>`;
     }
-</script>
-<script src="js/scripts.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    document.getElementById('dropdownButton').addEventListener('click', () => {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.toggle('hidden');
+    });
+  </script>
 </body>
+
 </html>
