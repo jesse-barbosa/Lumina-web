@@ -12,6 +12,7 @@ function createWindow() {
     });
 
     win.loadFile(path.join(__dirname, 'screens/index.html')); // Carrega o arquivo HTML
+    win.setMenuBarVisibility(false);
 }
 
 app.whenReady().then(createWindow);
