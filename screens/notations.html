@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <title>Lumina - Anotações</title>
+</head>
+
+<body class="bg-neutral-50 text-neutral-800 font-sans">
+  <!-- Sidebar Menu -->
+  <menu-sidebar></menu-sidebar>
+
+  <main class="ml-52 min-h-screen">
+    <!-- Top Bar with Profile Dropdown -->
+    <div class="sticky top-0 z-10 flex justify-between items-center p-4 bg-white border-b border-neutral-200">
+      <div class="flex items-center">
+        <h1 class="text-lg font-semibold text-neutral-800">Anotações</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative inline-block text-left">
+          <button id="dropdownButton" class="flex items-center gap-2 focus:outline-none">
+            <img src="../assets/profile/default.png" alt="Profile" class="w-8 h-8 rounded-full border border-neutral-200">
+            <span class="text-sm font-medium" id="user-name-display">USER_NAME</span>
+            <i class="bi bi-chevron-down text-neutral-500 text-sm"></i>
+          </button>
+          <ul id="dropdownMenu" class="hidden absolute right-0 mt-2 w-56 bg-white border border-neutral-200 rounded-md shadow-lg z-10">
+            <li><span class="block px-4 py-2 text-sm text-neutral-700">Usuário: <span id="user-name">USER_NAME</span></span></li>
+            <li><a href="login.html" class="block px-4 py-2 text-sm text-center text-white bg-red-500 hover:bg-red-600 rounded-b-md">Sair</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6">
+      <!-- Saudação -->
+      <section class="mb-6">
+        <div class="flex items-baseline">
+          <h1 id="saudacao" class="text-2xl font-semibold text-neutral-800"></h1>
+        </div>
+      </section>
+
+      <!-- Search Bar -->
+      <div class="mb-6 relative">
+        <div class="relative">
+          <i class="bi bi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+          <input type="text" placeholder="Pesquisar anotações..." class="w-full pl-10 py-2 pr-4 rounded-md border border-neutral-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
+        </div>
+      </div>
+
+      <!-- Notations Grid -->
+      <section class="mb-8">
+        <div id="notations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Notation cards will be inserted here by JavaScript -->
+        </div>
+      </section>
+
+      <!-- Add Button -->
+      <button id="openNotationModalBtn" class="fixed w-14 h-14 right-6 bottom-6 rounded-full flex items-center justify-center text-white bg-blue-500 hover:bg-blue-600 transition shadow-md">
+        <i class="bi bi-plus text-3xl"></i>
+      </button>
+    </div>
+  </main>
+
+  <!-- Add Notation Modal -->
+  <div id="addNotationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Nova Anotação</h2>
+          <button id="closeModalBtn" class="text-neutral-500 hover:text-neutral-700">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <label for="notation-title" class="text-sm font-medium">Título</label>
+            <input id="notation-title" type="text" placeholder="Título da anotação" class="w-full px-3 py-2 border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <div class="space-y-2">
+            <label for="notation-content" class="text-sm font-medium">Conteúdo</label>
+            <textarea id="notation-content" placeholder="Escreva sua anotação aqui..." rows="5" class="w-full px-3 py-2 border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button id="cancelNotationBtn" class="px-4 py-2 border border-neutral-200 rounded-md text-neutral-700 hover:bg-neutral-50">Cancelar</button>
+          <button id="saveNotationBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../components/menu-component.js" defer></script>
+  <script>
+    // Sample notation data
+    let notations = [
+      {
+        id: 1,
+        title: "Reunião de Planejamento",
+        content: "Pontos discutidos: orçamento trimestral, novos projetos e alocação de recursos. Próximos passos incluem revisão de propostas até sexta-feira.",
+        date: "10/04/2024"
+      },
+      {
+        id: 2,
+        title: "Ideias para Campanha de Marketing",
+        content: "Focar em sustentabilidade, engajamento nas redes sociais e parcerias estratégicas. Desenvolver conteúdo visual impactante para Instagram e LinkedIn.",
+        date: "08/04/2024"
+      },
+      {
+        id: 3,
+        title: "Feedback da Equipe",
+        content: "Principais pontos: melhorar comunicação entre departamentos, implementar reuniões semanais de alinhamento e criar documentação mais clara para processos.",
+        date: "05/04/2024"
+      },
+      {
+        id: 4,
+        title: "Lista de Verificação - Lançamento",
+        content: "1. Testar todas as funcionalidades 2. Verificar compatibilidade mobile 3. Preparar materiais de suporte 4. Treinar equipe de atendimento 5. Agendar anúncios",
+        date: "03/04/2024"
+      }
+    ];
+
+    // DOM Elements
+    const notationsGrid = document.getElementById('notations-grid');
+    const addNotationModal = document.getElementById('addNotationModal');
+    const openNotationModalBtn = document.getElementById('openNotationModalBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const cancelNotationBtn = document.getElementById('cancelNotationBtn');
+    const saveNotationBtn = document.getElementById('saveNotationBtn');
+    const notationTitleInput = document.getElementById('notation-title');
+    const notationContentInput = document.getElementById('notation-content');
+
+    // Render notations
+    function renderNotations() {
+      notationsGrid.innerHTML = '';
+      
+      notations.forEach(note => {
+        const notationCard = document.createElement('div');
+        notationCard.className = "bg-blue-100 border border-blue-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group";
+        notationCard.innerHTML = `
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-medium text-neutral-800 line-clamp-1">${note.title}</h3>
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="p-1 text-neutral-500 hover:text-neutral-700 rounded-md hover:bg-white/50 edit-btn" data-id="${note.id}">
+                  <i class="bi bi-pencil text-sm"></i>
+                </button>
+                <button class="p-1 text-neutral-500 hover:text-red-500 rounded-md hover:bg-white/50 delete-btn" data-id="${note.id}">
+                  <i class="bi bi-trash text-sm"></i>
+                </button>
+              </div>
+            </div>
+            <p class="text-sm text-neutral-600 line-clamp-3 mb-3">${note.content}</p>
+            <div class="text-xs text-neutral-500">${note.date}</div>
+          </div>
+        `;
+        
+        notationsGrid.appendChild(notationCard);
+      });
+
+      // Add event listeners to delete buttons
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = parseInt(btn.getAttribute('data-id'));
+          deleteNotation(id);
+        });
+      });
+
+      // Add event listeners to edit buttons (placeholder for future implementation)
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Edit functionality would go here
+          alert('Editar anotação: ' + btn.getAttribute('data-id'));
+        });
+      });
+
+      // Add click event to cards (placeholder for future implementation)
+      document.querySelectorAll('.group').forEach(card => {
+        card.addEventListener('click', () => {
+          // View full notation functionality would go here
+          const title = card.querySelector('h3').textContent;
+          alert('Visualizar anotação: ' + title);
+        });
+      });
+    }
+
+    // Delete notation
+    function deleteNotation(id) {
+      notations = notations.filter(note => note.id !== id);
+      renderNotations();
+    }
+
+    // Add new notation
+    function addNotation() {
+      const title = notationTitleInput.value.trim();
+      const content = notationContentInput.value.trim();
+      
+      if (!title || !content) return;
+      
+      const today = new Date();
+      const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+      
+      const newNotation = {
+        id: Date.now(),
+        title,
+        content,
+        date: formattedDate
+      };
+      
+      notations.unshift(newNotation);
+      renderNotations();
+      
+      // Reset form and close modal
+      notationTitleInput.value = '';
+      notationContentInput.value = '';
+      addNotationModal.classList.add('hidden');
+    }
+
+    // Modal event listeners
+    openNotationModalBtn.addEventListener('click', () => {
+      addNotationModal.classList.remove('hidden');
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+      addNotationModal.classList.add('hidden');
+    });
+
+    cancelNotationBtn.addEventListener('click', () => {
+      addNotationModal.classList.add('hidden');
+    });
+
+    saveNotationBtn.addEventListener('click', addNotation);
+
+    // Close modal when clicking outside
+    addNotationModal.addEventListener('click', (e) => {
+      if (e.target === addNotationModal) {
+        addNotationModal.classList.add('hidden');
+      }
+    });
+
+    // Dropdown menu toggle
+    document.getElementById('dropdownButton').addEventListener('click', () => {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.toggle('hidden');
+    });
+
+    // User greeting
+    const username = "USER_NAME";
+    document.getElementById('user-name').innerText = username;
+    document.getElementById('user-name-display').innerText = username;
+
+    function getDate() {
+      const agora = new Date();
+      const hora = agora.getHours();
+      const diaMes = agora.getDate();
+      const diaSem = agora.getDay();
+
+      const diasDaSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+      const saudacao = document.getElementById('saudacao');
+
+      let mensagem = hora < 12 ? `Bom dia, ${username}` : hora < 18 ? `Boa tarde, ${username}` : `Boa noite, ${username}`;
+      saudacao.innerHTML = `${mensagem}<br><span class="text-sm font-normal text-neutral-500">Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.</span>`;
+    }
+
+    // Initialize
+    getDate();
+    renderNotations();
+  </script>
+</body>
+</html>
