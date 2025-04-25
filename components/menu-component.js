@@ -2,7 +2,7 @@ class MenuComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <!-- Sidebar Menu -->
-      <aside class="fixed top-0 left-0 h-screen w-48 bg-white border-r border-neutral-100 z-20 flex flex-col">
+      <aside class="fixed top-0 left-0 h-screen shadow w-48 bg-white border-r border-neutral-100 z-20 flex flex-col">
         <!-- Logo -->
         <div class="px-4 py-5 flex items-center">
           <img src="../assets/icon.png" alt="Lumina" class="w-8 h-8 rounded-md">
