@@ -80,40 +80,14 @@
         </div>
       </section>
 
-      <!-- Add Button -->
-      <button id="openNotationModalBtn" class="fixed w-14 h-14 right-6 bottom-6 rounded-full flex items-center justify-center text-white bg-blue-500 hover:bg-blue-600 transition shadow-md">
-        <i class="bi bi-plus text-3xl"></i>
-      </button>
+    <!-- Add Button -->
+    <a href="viewNotation.html" 
+      id="openNotationModalBtn" 
+      class="fixed w-14 h-14 right-6 bottom-6 rounded-full flex items-center justify-center text-white bg-blue-500 hover:bg-blue-600 transition shadow-md">
+      <i class="bi bi-plus text-3xl"></i>
+    </a>
     </div>
   </main>
-
-  <!-- Add Notation Modal -->
-  <div id="addNotationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold">Nova Anotação</h2>
-          <button id="closeModalBtn" class="text-neutral-500 hover:text-neutral-700">
-            <i class="bi bi-x-lg"></i>
-          </button>
-        </div>
-        <div class="space-y-4">
-          <div class="space-y-2">
-            <label for="notation-title" class="text-sm font-medium">Título</label>
-            <input id="notation-title" type="text" placeholder="Título da anotação" class="w-full px-3 py-2 border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-          </div>
-          <div class="space-y-2">
-            <label for="notation-content" class="text-sm font-medium">Conteúdo</label>
-            <textarea id="notation-content" placeholder="Escreva sua anotação aqui..." rows="5" class="w-full px-3 py-2 border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-          </div>
-        </div>
-        <div class="flex justify-end gap-2 mt-6">
-          <button id="cancelNotationBtn" class="px-4 py-2 border border-neutral-200 rounded-md text-neutral-700 hover:bg-neutral-50">Cancelar</button>
-          <button id="saveNotationBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Salvar</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Scripts -->
   <script src="../components/menu-component.js" defer></script>
@@ -148,13 +122,6 @@
 
     // DOM Elements
     const notationsGrid = document.getElementById('notations-grid');
-    const addNotationModal = document.getElementById('addNotationModal');
-    const openNotationModalBtn = document.getElementById('openNotationModalBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const cancelNotationBtn = document.getElementById('cancelNotationBtn');
-    const saveNotationBtn = document.getElementById('saveNotationBtn');
-    const notationTitleInput = document.getElementById('notation-title');
-    const notationContentInput = document.getElementById('notation-content');
     const sortButton = document.getElementById('sort-button');
     const sortDropdown = document.getElementById('sort-dropdown');
     const filterAllBtn = document.getElementById('filter-all');
@@ -202,7 +169,7 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           // Edit functionality would go here
-          alert('Editar anotação: ' + btn.getAttribute('data-id'));
+          window.location.href = `viewNotation.html?id=${btn.getAttribute('data-id')}`;
         });
       });
 
@@ -224,28 +191,18 @@
 
     // Add new notation
     function addNotation() {
-      const title = notationTitleInput.value.trim();
-      const content = notationContentInput.value.trim();
-      
-      if (!title || !content) return;
-      
       const today = new Date();
       const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
       
       const newNotation = {
         id: Date.now(),
-        title,
-        content,
+        title: "Anotação sem título",
+        content: "",
         date: formattedDate
       };
       
       notations.unshift(newNotation);
       renderNotations();
-      
-      // Reset form and close modal
-      notationTitleInput.value = '';
-      notationContentInput.value = '';
-      addNotationModal.classList.add('hidden');
     }
 
     // Filter recent notes (last 7 days)
@@ -312,29 +269,7 @@
       
       renderNotations();
     }
-
-    // Modal event listeners
-    openNotationModalBtn.addEventListener('click', () => {
-      addNotationModal.classList.remove('hidden');
-    });
-
-    closeModalBtn.addEventListener('click', () => {
-      addNotationModal.classList.add('hidden');
-    });
-
-    cancelNotationBtn.addEventListener('click', () => {
-      addNotationModal.classList.add('hidden');
-    });
-
-    saveNotationBtn.addEventListener('click', addNotation);
-
-    // Close modal when clicking outside
-    addNotationModal.addEventListener('click', (e) => {
-      if (e.target === addNotationModal) {
-        addNotationModal.classList.add('hidden');
-      }
-    });
-
+    
     // Sort dropdown toggle
     sortButton.addEventListener('click', () => {
       sortDropdown.classList.toggle('hidden');

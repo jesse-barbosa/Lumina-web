@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <title>Lumina - Visualizar Anotação</title>
+</head>
+
+<body class="bg-neutral-50 text-neutral-800 font-sans">
+  <!-- Sidebar Menu -->
+  <menu-sidebar></menu-sidebar>
+
+  <main class="ml-48 min-h-screen">
+    <!-- Top Bar with Profile Dropdown -->
+    <div class="sticky top-0 z-10 flex justify-between items-center p-4 bg-white border-b border-neutral-200">
+      <div class="flex items-center">
+        <a href="notations.html" class="mr-3 text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full p-2 transition">
+          <i class="bi bi-arrow-left text-xl"></i>
+        </a>
+        <h1 class="text-lg font-semibold text-neutral-800">Anotação</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <button id="edit-button" class="p-2 text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100 rounded-full transition">
+          <i class="bi bi-pencil text-xl"></i>
+        </button>
+        <button id="delete-button" class="p-2 text-neutral-500 hover:text-red-500 hover:bg-neutral-100 rounded-full transition">
+          <i class="bi bi-trash text-xl"></i>
+        </button>
+        <div class="relative inline-block text-left">
+          <button id="dropdownButton" class="flex items-center gap-2 focus:outline-none">
+            <img src="../assets/profile/default.png" alt="Profile" class="w-8 h-8 rounded-full border border-neutral-200">
+            <span class="text-sm font-medium" id="user-name-display">USER_NAME</span>
+            <i class="bi bi-chevron-down text-neutral-500 text-sm"></i>
+          </button>
+          <ul id="dropdownMenu" class="hidden absolute right-0 mt-2 w-56 bg-white border border-neutral-200 rounded-md shadow-lg z-10">
+            <li><span class="block px-4 py-2 text-sm text-neutral-700">Usuário: <span id="user-name">USER_NAME</span></span></li>
+            <li><a href="login.html" class="block px-4 py-2 text-sm text-center text-white bg-red-500 hover:bg-red-600 rounded-b-md">Sair</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-6 max-w-4xl mx-auto">
+
+      <!-- Notation Content -->
+      <section class="mb-8">
+        <!-- View Mode -->
+        <div id="view-mode" class="bg-white border border-neutral-200 rounded-lg p-6 shadow-sm min-h-[70vh]">
+          <div id="notation-content-display" class="whitespace-pre-wrap text-lg leading-relaxed">
+            Carregando conteúdo...
+          </div>
+        </div>
+        
+        <!-- Edit Mode (hidden by default) -->
+        <div id="edit-mode" class="hidden">
+          <div class="mb-4">
+            <input 
+              type="text" 
+              id="notation-title-input" 
+              class="w-full text-3xl font-semibold border-0 border-b border-neutral-200 pb-2 mb-4 focus:outline-none focus:border-blue-500 bg-transparent" 
+              placeholder="Título da anotação">
+            <div class="text-sm text-neutral-500 mt-1" id="notation-date">Criado em: --/--/----</div>
+          </div>
+          <textarea 
+            id="notation-content-input" 
+            class="w-full min-h-[70vh] p-6 text-lg leading-relaxed border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" 
+            placeholder="Comece a escrever aqui..."></textarea>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Confirmar exclusão</h2>
+          <button id="closeConfirmationBtn" class="text-neutral-500 hover:text-neutral-700">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <p class="mb-6">Tem certeza que deseja excluir esta anotação? Esta ação não pode ser desfeita.</p>
+        <div class="flex justify-end gap-2">
+          <button id="cancelDeleteBtn" class="px-4 py-2 border border-neutral-200 rounded-md text-neutral-700 hover:bg-neutral-50">Cancelar</button>
+          <button id="confirmDeleteBtn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../components/menu-component.js" defer></script>
+  <script>
+    // DOM Elements
+    const notationTitleDisplay = document.getElementById('notation-title-display');
+    const notationContentDisplay = document.getElementById('notation-content-display');
+    const notationDateElement = document.getElementById('notation-date');
+    const notationTitleInput = document.getElementById('notation-title-input');
+    const notationContentInput = document.getElementById('notation-content-input');
+    const viewMode = document.getElementById('view-mode');
+    const editMode = document.getElementById('edit-mode');
+    const editButton = document.getElementById('edit-button');
+    const deleteButton = document.getElementById('delete-button');
+    const confirmationModal = document.getElementById('confirmationModal');
+    const closeConfirmationBtn = document.getElementById('closeConfirmationBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    // Sample notation data (in a real app, this would be fetched from a database)
+    let notations = [
+      {
+        id: 1,
+        title: "Reunião de Planejamento",
+        content: "Pontos discutidos: orçamento trimestral, novos projetos e alocação de recursos. Próximos passos incluem revisão de propostas até sexta-feira.",
+        date: "10/04/2024"
+      },
+      {
+        id: 2,
+        title: "Ideias para Campanha de Marketing",
+        content: "Focar em sustentabilidade, engajamento nas redes sociais e parcerias estratégicas. Desenvolver conteúdo visual impactante para Instagram e LinkedIn.",
+        date: "08/04/2024"
+      },
+      {
+        id: 3,
+        title: "Feedback da Equipe",
+        content: "Principais pontos: melhorar comunicação entre departamentos, implementar reuniões semanais de alinhamento e criar documentação mais clara para processos.",
+        date: "05/04/2024"
+      },
+      {
+        id: 4,
+        title: "Lista de Verificação - Lançamento",
+        content: "1. Testar todas as funcionalidades\n2. Verificar compatibilidade mobile\n3. Preparar materiais de suporte\n4. Treinar equipe de atendimento\n5. Agendar anúncios",
+        date: "03/04/2024"
+      }
+    ];
+
+    // Current notation ID
+    let currentNotationId = null;
+    let hasChanges = false;
+
+    // Get notation ID from URL
+    function getNotationIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = Number(urlParams.get('id'));
+      
+      // If we have a id parameter, we're creating a new note
+      if (id) {
+        return createNewNotation();
+      }
+      
+      // If we don't have an id parameter, we're editing an existing note
+      return id || null;
+    }
+
+    // Create a new notation
+    function createNewNotation(title) {
+      const today = new Date();
+      const formattedDate = `${today.getDate().toString().padStart(2, '0')}/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+      
+      const newNotation = {
+        id: Date.now(),
+        title: title || "Anotação sem título",
+        content: "",
+        date: formattedDate
+      };
+      
+      notations.unshift(newNotation);
+      
+      // Automatically enter edit mode for new notations
+      setTimeout(() => {
+        enterEditMode();
+      }, 100);
+      
+      return newNotation.id;
+    }
+
+    // Load notation data
+    function loadNotation(id) {
+      currentNotationId = id;
+      const notation = notations.find(note => note.id === id);
+      
+      if (!notation) {
+        notationTitleDisplay.textContent = "Anotação não encontrada";
+        notationContentDisplay.textContent = "A anotação solicitada não existe ou foi removida.";
+        notationDateElement.textContent = "";
+        editButton.disabled = true;
+        deleteButton.disabled = true;
+        return;
+      }
+      
+      notationTitleDisplay.textContent = notation.title;
+      notationContentDisplay.textContent = notation.content;
+      notationDateElement.textContent = `Criado em: ${notation.date}`;
+      
+      // Also populate the edit form
+      notationTitleInput.value = notation.title;
+      notationContentInput.value = notation.content;
+    }
+
+    // Enter edit mode
+    function enterEditMode() {
+      viewMode.classList.add('hidden');
+      editMode.classList.remove('hidden');
+      notationTitleInput.focus();
+      
+      // Add event listeners for detecting changes
+      notationTitleInput.addEventListener('input', markAsChanged);
+      notationContentInput.addEventListener('input', markAsChanged);
+    }
+
+    // Exit edit mode and save
+    function exitEditMode() {
+      if (hasChanges) {
+        saveNotation();
+      }
+      
+      editMode.classList.add('hidden');
+      viewMode.classList.remove('hidden');
+      
+      // Remove event listeners
+      notationTitleInput.removeEventListener('input', markAsChanged);
+      notationContentInput.removeEventListener('input', markAsChanged);
+      
+      hasChanges = false;
+    }
+
+    // Mark that changes have been made
+    function markAsChanged() {
+      hasChanges = true;
+    }
+
+    // Save notation
+    function saveNotation() {
+      if (!currentNotationId) return;
+      
+      const notation = notations.find(note => note.id === currentNotationId);
+      if (!notation) return;
+      
+      notation.title = notationTitleInput.value.trim() || "Anotação sem título";
+      notation.content = notationContentInput.value.trim();
+      
+      // Update the display
+      notationTitleDisplay.textContent = notation.title;
+      notationContentDisplay.textContent = notation.content;
+      
+      // In a real app, you would save to a database here
+      console.log("Anotação salva:", notation);
+      
+      hasChanges = false;
+    }
+
+    // Delete notation
+    function deleteNotation() {
+      const id = currentNotationId;
+      
+      // In a real app, you would delete from a database here
+      console.log("Anotação excluída:", id);
+      
+      // Redirect back to the notations page
+      window.location.href = "notations.html";
+    }
+
+    // Event Listeners
+    editButton.addEventListener('click', enterEditMode);
+    
+    deleteButton.addEventListener('click', () => {
+      confirmationModal.classList.remove('hidden');
+    });
+    
+    closeConfirmationBtn.addEventListener('click', () => {
+      confirmationModal.classList.add('hidden');
+    });
+    
+    cancelDeleteBtn.addEventListener('click', () => {
+      confirmationModal.classList.add('hidden');
+    });
+    
+    confirmDeleteBtn.addEventListener('click', deleteNotation);
+    
+    // Close modal when clicking outside
+    confirmationModal.addEventListener('click', (e) => {
+      if (e.target === confirmationModal) {
+        confirmationModal.classList.add('hidden');
+      }
+    });
+
+    // Auto-resize textarea
+    notationContentInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Save when navigating away
+    window.addEventListener('beforeunload', function(e) {
+      if (hasChanges) {
+        saveNotation();
+      }
+    });
+
+    // Back button handling
+    document.querySelector('a[href="notations.html"]').addEventListener('click', function(e) {
+      if (editMode.classList.contains('hidden')) {
+        // If in view mode, just navigate normally
+        return;
+      }
+      
+      // If in edit mode, save before navigating
+      e.preventDefault();
+      exitEditMode();
+      window.location.href = "notations.html";
+    });
+
+    // Dropdown menu toggle
+    document.getElementById('dropdownButton').addEventListener('click', () => {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.toggle('hidden');
+    });
+
+    // User name
+    const username = "USER_NAME";
+    document.getElementById('user-name').innerText = username;
+    document.getElementById('user-name-display').innerText = username;
+
+    // Initialize
+    const notationId = getNotationIdFromUrl();
+    if (notationId) {
+      loadNotation(notationId);
+    }
+  </script>
+</body>
+</html>
