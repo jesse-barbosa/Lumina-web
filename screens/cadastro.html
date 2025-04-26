@@ -231,6 +231,15 @@
     <script src="../js/supabase.js"></script>
     <script src="../js/auth/register.js"></script>
     <script>
+        // try to get user data
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // Verify if user session exists
+        if (user) {
+            // if exist, redirect to dashboard
+            window.location.href = "dashboard.html";
+        } 
+
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
