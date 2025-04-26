@@ -12,7 +12,7 @@ class MenuComponent extends HTMLElement {
         <!-- Navigation -->
         <nav class="flex-1 px-3 py-4">
           <!-- Main Navigation -->
-          <ul class="space-y-1.5">
+          <ul class="space-y-1.5 mb-3">
             <li>
               <a href="./dashboard.html" class="nav-link flex items-center px-2 py-1.5 rounded-md text-neutral-700 hover:bg-neutral-50 group" data-page="dashboard">
                 <i class="bi bi-house text-neutral-500 group-hover:text-blue-500 mr-2"></i>
@@ -34,7 +34,7 @@ class MenuComponent extends HTMLElement {
           </ul>
           
           <!-- Recent Notes Section -->
-          <div class="mt-6">
+          <div class="pt-4 border-t border-neutral-100">
             <p class="px-2 text-xs font-medium text-neutral-500 uppercase tracking-wider mb-2">Recentes</p>
             <ul class="space-y-1">
               <li>
