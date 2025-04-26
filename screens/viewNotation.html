@@ -320,10 +320,10 @@
       dropdown.classList.toggle('hidden');
     });
 
-    // User name
-    const username = "USER_NAME";
-    document.getElementById('user-name').innerText = username;
-    document.getElementById('user-name-display').innerText = username;
+    // Get user
+    const user = JSON.parse(localStorage.getItem('user'));
+    document.getElementById('user-name').innerText = user.name;
+    document.getElementById('user-name-display').innerText = user.name;
 
     // Initialize
     const notationId = getNotationIdFromUrl();

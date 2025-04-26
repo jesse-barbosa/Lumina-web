@@ -147,9 +147,10 @@
     });
   </script>
   <script>
-    const username = "USER_NAME";
-    document.getElementById('user-name').innerText = username;
-    document.getElementById('user-name-display').innerText = username;
+    // Get user
+    const user = JSON.parse(localStorage.getItem('user'));
+    document.getElementById('user-name').innerText = user.name;
+    document.getElementById('user-name-display').innerText = user.name;
 
     // Removed getDate() function since we no longer need the greeting
 
