@@ -15,7 +15,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile(path.join(__dirname, 'screens/index.html')); // Carrega o arquivo HTML
+    win.loadFile(path.join(__dirname, 'screens/dashboard.html')); // Carrega o arquivo HTML
     win.setMenuBarVisibility(false);
 }
 

@@ -226,11 +226,21 @@
       });
     }
 
-    // User greeting
-    const username = "USER_NAME";
-    document.getElementById('user-name').innerText = username;
-    document.getElementById('user-name-display').innerText = username;
+    // get user
+    const user = JSON.parse(localStorage.getItem('user'));
 
+    if (!user) {
+        // if doesn't exist user, redirect to login
+        window.location.href = "index.html";
+    } else {
+        // if user exist, update screen
+        document.getElementById('user-name').innerText = user.name;
+        document.getElementById('user-name-display').innerText = user.name;
+        getDate();
+        renderRecentNotes();
+    }
+
+    // User greeting
     function getDate() {
       const agora = new Date();
       const hora = agora.getHours();
@@ -240,7 +250,7 @@
       const diasDaSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
       const saudacao = document.getElementById('saudacao');
 
-      let mensagem = hora < 12 ? `Bom dia, ${username}` : hora < 18 ? `Boa tarde, ${username}` : `Boa noite, ${username}`;
+      let mensagem = hora < 12 ? `Bom dia, ${user.name}` : hora < 18 ? `Boa tarde, ${user.name}` : `Boa noite, ${user.name}`;
       saudacao.innerHTML = `${mensagem}<br><span class="text-sm font-normal text-neutral-500">Hoje é dia ${diaMes} - ${diasDaSemana[diaSem]}.</span>`;
     }
 
