@@ -23,18 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Se o signup foi bem-sucedido
-        const userId = signUpData.user.id; // Pega o ID gerado no auth.users
+        const userId = signUpData.user.id; // ID do auth.users
 
-        // Depois insere na tabela personalizada 'users'
-        const { error: insertError } = await supabase
+        // Insere na tabela personalizada 'users'
+        const { data: insertData, error: insertError } = await supabase
             .from('users')
             .insert([{
                 name: name,
                 email: email,
                 user_id: userId,
                 status: 1
-            }]);
+            }])
+            .select()
+            .single(); // retorna o registro inserido direto
 
         if (insertError) {
             // Mostra erro
@@ -43,9 +44,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Tudo certo, redireciona
+        // Salva no Local Storage
+        localStorage.setItem('user', JSON.stringify({
+            id: insertData.id,
+            name: insertData.name,
+            email: insertData.email
+        }));
+
         errorMessage.classList.add('hidden');
-        console.log('Usuário registrado e adicionado na tabela personalizada.');
+        console.log('Usuário registrado e salvo no localStorage.');
+
+        // Redireciona
         window.location.href = "dashboard.html";
     });
 });

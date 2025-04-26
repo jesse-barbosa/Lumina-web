@@ -9,23 +9,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        // Usa o cliente supabase criado no supabase.js
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // Login no Supabase Auth
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
             email,
             password
         });
 
-        if (error) {
+        if (signInError) {
             // Mostra erro
-            errorMessage.textContent = error.message;
+            errorMessage.textContent = signInError.message;
             errorMessage.classList.remove('hidden');
-        } else {
-            // Login OK
-            errorMessage.classList.add('hidden');
-            console.log('Usuário logado:', data.user);
-
-            // Redireciona para dashboard
-            window.location.href = "dashboard.html";
+            return;
         }
+
+        const userId = signInData.user.id;
+
+        // Busca os dados adicionais do usuário na tabela 'users'
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('id, name, email')
+            .eq('user_id', userId)
+            .single(); // Garante que vai trazer apenas 1
+
+        if (userError) {
+            errorMessage.textContent = userError.message;
+            errorMessage.classList.remove('hidden');
+            return;
+        }
+
+        // Salva no Local Storage
+        localStorage.setItem('user', JSON.stringify({
+            id: userData.id,
+            name: userData.name,
+            email: userData.email
+        }));
+
+        console.log('Usuário logado:', userData);
+
+        // Redireciona para dashboard
+        window.location.href = "dashboard.html";
     });
 });
