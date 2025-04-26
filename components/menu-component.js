@@ -65,7 +65,7 @@ class MenuComponent extends HTMLElement {
             </div>
             <div class="flex flex-col text-start ml-2 overflow-hidden">
               <p class="text-sm font-medium truncate" id="user-name-display">USER_NAME</p>
-              <span class="text-xs text-neutral-600 font-medium truncate w-32">email_user@example.com</span>
+              <span class="text-xs text-neutral-600 font-medium truncate w-32" id="user-email-display">email_user@example.com</span>
             </div>
           </div>
         </div>
@@ -88,6 +88,25 @@ class MenuComponent extends HTMLElement {
 
     // Set active menu item based on current page
     this.setActivePage();
+    this.setUserInfo();
+  }
+  
+  setUserInfo() {
+    try {
+      const userDataJson = localStorage.getItem('user');
+      if (userDataJson) {
+        const userData = JSON.parse(userDataJson);
+
+        // Atualizar o nome e e-mail nos elementos
+        const userNameEl = this.querySelector('#user-name-display');
+        const userEmailEl = this.querySelector('#user-email-display');
+
+        if (userNameEl) userNameEl.textContent = userData.name || 'Usuário';
+        if (userEmailEl) userEmailEl.textContent = userData.email || 'email@example.com';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar usuário:', error);
+    }
   }
 
   setActivePage() {
